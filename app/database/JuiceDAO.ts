@@ -47,7 +47,7 @@ export class JuiceDAO
 
             // Use Promisfy Util to make an async function and insert Album
             connection.query = util.promisify(connection.query);
-            let result1 = await connection.query('INSERT INTO Juices (NAME, INGREDIENTS, BENEFITS, HTM) VALUES(?,?,?,?)', [juice.Name, juice.Ingredients, juice.Benefits, juice.Htm]);
+            let result1 = await connection.query('INSERT INTO Juices (NAME, INGREDIENTS, BENEFITS, HTM, IMAGENAME) VALUES(?,?,?,?,?)', [juice.Name, juice.Ingredients, juice.Benefits, juice.Htm, juice.ImageName]);
             if(result1.affectedRows != 1)
                callback(-1);
 
@@ -84,7 +84,7 @@ export class JuiceDAO
             for(let x=0;x < result1.length;++x)
             {
                 // Add Juice and its data to the list
-                juices.push(new Juice(result1[x].ID, result1[x].NAME, result1[x].INGREDIENTS, result1[x].BENEFITS, result1[x].HTM));
+                juices.push(new Juice(result1[x].ID, result1[x].NAME, result1[x].INGREDIENTS, result1[x].BENEFITS, result1[x].HTM, result1[x].IMAGENAME));
             }
 
             // Do a callback to return the results
@@ -112,7 +112,7 @@ export class JuiceDAO
              // Use Promisfy Util to make an async function and update Juice
             let changes = 0;
             connection.query = util.promisify(connection.query);
-            let result1 = await connection.query('UPDATE Juices SET NAME=?, INGREDIENTS=?, BENEFITS=?, HTM=? WHERE ID=?', [juice.Name, juice.Ingredients, juice.Benefits, juice.Htm, juice.Id]);
+            let result1 = await connection.query('UPDATE Juices SET NAME=?, INGREDIENTS=?, BENEFITS=?, HTM=?, IMAGENAME=? WHERE ID=?', [juice.Name, juice.Ingredients, juice.Benefits, juice.Htm, juice.ImageName, juice.Id]);
             if(result1.changedRows != 0)
                 ++changes;
  

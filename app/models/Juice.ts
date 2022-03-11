@@ -5,14 +5,16 @@ export class Juice
     private ingredients: string = "";
     private benefits: string = "";
     private htm: string = "";
+    private imageName: string = "";
  
-    constructor(id:number, name:string, ingredients:string, benefits:string, htm:string)
+    constructor(id:number, name:string, ingredients:string, benefits:string, htm:string, imagename:string)
     {
         this.id = id;
         this.name = name;
         this.ingredients = ingredients;
         this.benefits = benefits;
         this.htm = htm;
+        this.imageName = imagename;
     }
 
     get Id():number
@@ -59,5 +61,15 @@ export class Juice
     public set Htm(htm: string) 
     {
         this.htm = htm;
+    }
+
+    public get ImageName(): string
+    {
+        return this.imageName;
+    }
+
+    public set ImageName(imagename:string)
+    {
+        this.imageName = imagename;
     }
 }

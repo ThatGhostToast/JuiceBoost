@@ -55,7 +55,7 @@ app.post('/juice', function (req, res)
     else
     {
         // New juice model
-        let juice = new Juice(req.body.id, req.body.Name, req.body.Ingredients, req.body.Benefits, req.body.Htm);
+        let juice = new Juice(req.body.id, req.body.Name, req.body.Ingredients, req.body.Benefits, req.body.Htm, req.body.ImageName);
 
         // Call juiceDAO.create() to create a juice from Posted Data and return an OK response     
         let dao = new JuiceDAO(dbHost, dbPort, dbUsername, dbPassword);
@@ -101,7 +101,7 @@ app.put('/juice', function (req, res)
     else
     {
         // New juice model from Posted Data
-        let juice = new Juice(req.body.Id, req.body.Name, req.body.Ingredients, req.body.Benefits, req.body.Htm);
+        let juice = new Juice(req.body.Id, req.body.Name, req.body.Ingredients, req.body.Benefits, req.body.Htm, req.body.ImageName);
 
         // Call MusicDAO.update() to update a juice from Posted Data and return an OK response     
         let dao = new JuiceDAO(dbHost, dbPort, dbUsername, dbPassword);
