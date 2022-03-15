@@ -92,6 +92,33 @@ export class JuiceDAO
          });
      }
 
+     public findJuiceById(id:number, callback: any)
+    {
+         // List of Juices to return
+         let juice:Juice;
+
+        // Get pooled database connection and run queries   
+        this.pool.getConnection(async function(err:any, connection:any)
+        {
+            // Release connection in the pool
+            connection.release();
+
+            // Throw error if an error
+            if (err) throw err;
+
+            // Use Promisfy Util to make an async function and run query to get all Juices for search
+            connection.query = util.promisify(connection.query);
+            let result1 = await connection.query("SELECT * FROM `Juices` WHERE ID = ?", id);
+            for(let x=0;x < result1.length;++x)
+            {
+                // Add Album and its Tracks to the list
+                juice = new Juice(result1[x].ID, result1[x].NAME, result1[x].INGREDIENTS, result1[x].BENEFITS, result1[x].HTM, result1[x].IMAGENAME); 
+            }
+            // Do a callback to return the results
+            callback(juice);
+         });
+    }
+
      /**
      * CRUD method to update a Juice.
      * 
@@ -112,10 +139,10 @@ export class JuiceDAO
              // Use Promisfy Util to make an async function and update Juice
             let changes = 0;
             connection.query = util.promisify(connection.query);
-            let result1 = await connection.query('UPDATE Juices SET NAME=?, INGREDIENTS=?, BENEFITS=?, HTM=?, IMAGENAME=? WHERE ID=?', [juice.Name, juice.Ingredients, juice.Benefits, juice.Htm, juice.ImageName, juice.Id]);
+            let result1 = await connection.query("UPDATE Juices SET NAME=?, INGREDIENTS=?, BENEFITS=?, HTM=?, IMAGENAME=? WHERE ID=?", [juice.Name, juice.Ingredients, juice.Benefits, juice.Htm, juice.ImageName, juice.Id]);
             if(result1.changedRows != 0)
                 ++changes;
- 
+            console.log(changes);
             // Do a callback to return the results
             callback(changes);
          });

@@ -1,5 +1,6 @@
 // Application Dependencies
 const { JuiceDAO } = require('./lib/app/database/JuiceDAO.js')
+const cors = require("cors");
 
 const bodyParser = require('body-parser');
 
@@ -9,6 +10,7 @@ const { Juice } = require('./lib/app/models/Juice.js');
 const app = express();
 const port = 3000;
 app.use(bodyParser.json());
+app.use(cors());
 
 // Database configuration
 const dbHost = "localhost"
@@ -40,6 +42,23 @@ app.get('/juice', function (_req, res)
     });
 })
 
+// GET Route that does a wildcard search for all Juices searching by id from the database
+app.get('/juices/search/juice/:id', function (req, res)
+{
+    // Return Albums List as JSON, call JuiceDAO.findJuiceById(), and return JSON array of Albums
+    console.log('In GET /juice/searach/juice Route for ' + req.params.id);
+    let dao = new JuiceDAO(dbHost, dbPort, dbUsername, dbPassword);
+    dao.findJuiceById(req.params.id, function(juice)
+    {
+        if (juice == null)
+        {
+            res.status(200).json({error: "INVALID JUICE ID"});
+        } else {
+            res.status(200).json(juice);
+        }
+    });
+})
+
 // POST Route at '/juice' that adds a juice to the database
 app.post('/juice', function (req, res)
 {
@@ -55,7 +74,7 @@ app.post('/juice', function (req, res)
     else
     {
         // New juice model
-        let juice = new Juice(req.body.id, req.body.Name, req.body.Ingredients, req.body.Benefits, req.body.Htm, req.body.ImageName);
+        let juice = new Juice(req.body.id, req.body.name, req.body.ingredients, req.body.benefits, req.body.htm, req.body.imageName);
 
         // Call juiceDAO.create() to create a juice from Posted Data and return an OK response     
         let dao = new JuiceDAO(dbHost, dbPort, dbUsername, dbPassword);
@@ -101,7 +120,7 @@ app.put('/juice', function (req, res)
     else
     {
         // New juice model from Posted Data
-        let juice = new Juice(req.body.Id, req.body.Name, req.body.Ingredients, req.body.Benefits, req.body.Htm, req.body.ImageName);
+        let juice = new Juice(req.body.id, req.body.name, req.body.ingredients, req.body.benefits, req.body.htm, req.body.imageName);
 
         // Call MusicDAO.update() to update a juice from Posted Data and return an OK response     
         let dao = new JuiceDAO(dbHost, dbPort, dbUsername, dbPassword);
